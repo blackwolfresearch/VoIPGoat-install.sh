@@ -1,4 +1,13 @@
 #!/bin/sh
+echo
+echo -n 'Please enter the FQDN of your server: '
+read fqdn
+
+if [ -z "$fqdn" ]; then
+        fqdn=ip_address
+fi
+
+echo "domain=$fqdn" >> resources/config.sh
 
 #move to script directory so all relative paths work
 cd "$(dirname "$0")"

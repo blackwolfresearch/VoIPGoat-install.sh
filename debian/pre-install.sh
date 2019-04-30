@@ -12,13 +12,3 @@ cd /usr/src && git clone https://github.com/blackwolfresearch/fusionpbx-install.
 
 #change the working directory
 cd /usr/src/fusionpbx-install.sh/debian
-
-echo
-echo -n 'Please enter the FQDN of your server: '
-read fqdn
-
-if [ -z "$fqdn" ]; then
-	fqdn=ip_address
-fi
-
-echo "domain=$fqdn" >> resources/config.sh
