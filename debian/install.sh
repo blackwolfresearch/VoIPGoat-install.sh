@@ -7,7 +7,7 @@ if [ -z "$fqdn" ]; then
         fqdn=ip_address
 fi
 
-echo "domain=$fqdn" >> resources/config.sh
+echo "domain_name=$fqdn" >> resources/config.sh
 
 #move to script directory so all relative paths work
 cd "$(dirname "$0")"
