@@ -6,6 +6,12 @@ cd "$(dirname "$0")"
 . ./config.sh
 . ./colors.sh
 
+client_ip=$(echo $SSH_CLIENT | cut -f 1 -d ' ')
+
+if [ -n "$client_ip" ]; then
+	source_rule="-s $client_ip"	
+fi
+
 #send a message
 verbose "Configuring IPTables"
 
@@ -15,10 +21,11 @@ iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -j DROP -p udp --dport 5060:5091 -m string --string "friendly-scanner" --algo bm
 iptables -A INPUT -j DROP -p udp --dport 5060:5091 -m string --string "sipcli/" --algo bm
 iptables -A INPUT -j DROP -p udp --dport 5060:5091 -m string --string "VaxSIPUserAgent/" --algo bm
-iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-iptables -A INPUT -p tcp --dport 7443 -j ACCEPT
+# restrict all this to client IP only
+iptables -A INPUT -p tcp $source_rule --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp $source_rule --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp $source_rule --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp $source_rule --dport 7443 -j ACCEPT
 iptables -A INPUT -p tcp --dport 5060:5091 -j ACCEPT
 iptables -A INPUT -p udp --dport 5060:5091 -j ACCEPT
 iptables -A INPUT -p udp --dport 16384:32768 -j ACCEPT
